@@ -37,7 +37,7 @@ defmodule Twytter.TweetService do
     pid = spawn(fn ->
       stream = ExTwitter.stream_filter(track: hashtag)
       for tweet <- stream do
-        IO.puts tweet.text
+        IO.puts "#{IO.inspect(tweet)}"
       end
     end)
     new_state = Map.put(state, hashtag, pid)
@@ -48,7 +48,7 @@ defmodule Twytter.TweetService do
     pid = spawn(fn ->
       stream = ExTwitter.stream_user(track: username)
       for tweet <- stream do
-        IO.puts tweet.text
+        IO.puts "#{IO.inspect(tweet)}"
       end
     end)
     new_state = Map.put(state, username, pid)
