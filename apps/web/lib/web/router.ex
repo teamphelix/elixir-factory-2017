@@ -1,4 +1,4 @@
-defmodule StaticServer.Router do
+defmodule Web.Router do
   use Plug.Router
 
   plug :match
