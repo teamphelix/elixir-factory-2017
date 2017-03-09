@@ -21,11 +21,11 @@ defmodule Twytter.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    applications(Mix.env)
+    [applications: applications(Mix.env), mod: {StaticServer, []}]
   end
 
   defp applications(_) do
-      [extra_applications: [:extwitter, :logger]]
+      [:extwitter, :cowboy, :plug, :poison, :logger]
   end
 
   # Dependencies can be Hex packages:
@@ -46,7 +46,10 @@ defmodule Twytter.Mixfile do
   end
   defp deps(_) do
     [
-      {:extwitter, "~> 0.8.2"}
+      {:extwitter, "~> 0.8.2"},
+      {:cowboy, "~> 1.1"},
+      {:plug, "~> 1.3"},
+      {:poison, "~> 2.0"}
     ]
   end
 end
