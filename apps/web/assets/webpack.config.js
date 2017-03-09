@@ -11,22 +11,69 @@ const autoprefixer = require("autoprefixer");
 /*
  * Configuration
  **/
-module.exports = (env) => {
+module.exports = (env='dev') => {
   console.log(env)
+
+  const prod = env === 'prod'
+  const publicPath = 'http://localhost:8080/'
+  const hot = 'webpack-hot-middleware/client?path=' +
+    publicPath + '__webpack_hmr'
+
   const isDev = !(env && env.prod);
-  const devtool = isDev ? "eval" : "source-map";
+  const devtool = isDev ? "cheap-module-eval-source-map" : "source-map";
+  const entry = {
+    app: [
+      "js/app.js",
+      "css/app.css"
+    ]
+  }
+  if (isDev) {
+    entry.app.unshift(hot)
+  }
+
+  const plugins = [
+    new CopyWebpackPlugin([{
+      from: "static"
+    }]),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      __PROD: prod,
+      __DEV: env === 'dev'
+    })
+  ]
+
+  if (env === 'dev') {
+    plugins.push(new webpack.HotModuleReplacementPlugin())
+  } else {
+    plugins = plugins.concat([
+      new ExtractTextPlugin({
+        filename: "css/[name].css",
+        allChunks: true
+      }),
+
+      new webpack.optimize.UglifyJsPlugin({ 
+        sourceMap: true,
+        beautify: false,
+        comments: false,
+        extractComments: false,
+        compress: {
+          warnings: false,
+          drop_console: true
+        },
+        mangle: {
+          except: ['$'],
+          screw_ie8 : true,
+          keep_fnames: true,
+        }
+      })
+    ])
+  }
 
   return {
-    devtool: devtool,
-
+    devtool,
     context: __dirname,
-
-    entry: {
-      app: [
-        "js/app.js",
-        "css/app.css"
-      ]
-    },
+    entry,
 
     output: {
       path: path.resolve(__dirname, "../priv/static"),
@@ -94,35 +141,6 @@ module.exports = (env) => {
       extensions: [".js", ".json", ".css"]
     },
 
-    plugins: isDev ? [
-      new CopyWebpackPlugin([{
-        from: "static"
-      }]),
-    ] : [
-      new CopyWebpackPlugin([{
-        from: "static"
-      }]),
-
-      new ExtractTextPlugin({
-        filename: "css/[name].css",
-        allChunks: true
-      }),
-
-      new webpack.optimize.UglifyJsPlugin({ 
-        sourceMap: true,
-        beautify: false,
-        comments: false,
-        extractComments: false,
-        compress: {
-          warnings: false,
-          drop_console: true
-        },
-        mangle: {
-          except: ['$'],
-          screw_ie8 : true,
-          keep_fnames: true,
-        }
-      })
-    ]
+    plugins
   };
 };

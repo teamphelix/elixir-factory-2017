@@ -17,8 +17,8 @@ defmodule Web.Router do
   EEx.function_from_file :defp, :template_index, @index_template, [:env]
 
   get "/" do
-    page_contents = EEx.eval_file(@index_template, [env: Mix.env])
-    # page_contents = template_index(Mix.env)
+    # page_contents = EEx.eval_file(@index_template, [env: Mix.env])
+    page_contents = template_index(Mix.env)
     conn
     |> Plug.Conn.put_resp_content_type("text/html")
     |> Plug.Conn.send_resp(200, page_contents)

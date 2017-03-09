@@ -12,7 +12,6 @@ renderApp(Routes)
 if (module.hot) {
   module.hot.accept('./app/routes', () => {
     const nextRoutes = require('./app/routes').default
-    console.log(nextRoutes)
-    renderAll(nextRoutes)
+    renderApp(nextRoutes)
   })
 }
