@@ -1,5 +1,5 @@
 defmodule Twytter.TweetService do
-  
+
   use GenServer
 
   def fetch_topic(pid, hashtag) do
@@ -28,7 +28,7 @@ defmodule Twytter.TweetService do
 
   def handle_call({:update, hashtag}, from, state) do
     for tweet <- ExTwitter.search(hashtag) do
-      IO.inspect tweet.text
+      IO.inspect tweet.txt
     end
     {:reply, from, state}
   end

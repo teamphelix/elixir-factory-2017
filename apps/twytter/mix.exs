@@ -21,7 +21,7 @@ defmodule Twytter.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [applications: applications(Mix.env), mod: {StaticServer, []}]
+    [applications: applications(Mix.env), mod: []]
   end
 
   defp applications(_) do
