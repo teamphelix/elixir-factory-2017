@@ -46,6 +46,7 @@ defmodule Db.Mixfile do
   defp deps(_) do
     [
       {:postgrex, "~> 0.13.2"},
+      {:comeonin, "~> 3.0"},
       {:ecto, "~> 2.1"}
     ]
   end

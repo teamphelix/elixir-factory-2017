@@ -13,7 +13,10 @@ defmodule Web do
       # worker(Web.Worker, [arg1, arg2, arg3]),
       # worker(__MODULE__, [], function: :run)
       Plug.Adapters.Cowboy.child_spec(
-        :http, Web.Router, [], port: 4001)
+        :http, Web.Router, [], [
+          port: 4001,
+          dispatch: dispatch
+        ])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
@@ -25,5 +28,14 @@ defmodule Web do
 
   def run do
     {:ok, _} = Plug.Adapters.Cowboy.http Web.Router, []
+  end
+
+  defp dispatch do
+    [
+      {:_, [
+        {"/ws", Web.SocketHandler, []},
+        {:_, Plug.Adapters.Cowboy.Handler, {Web.Router, []}}
+      ]}
+    ]
   end
 end

@@ -89,7 +89,11 @@ module.exports = (env='dev') => {
           loader: "babel-loader",
           options: {
             presets: [
-              ['es2015', {modules: false}]
+              ['es2015', {modules: false}],
+              'stage-2'
+            ],
+            plugins: [
+              "transform-class-properties"
             ]
           }
         },

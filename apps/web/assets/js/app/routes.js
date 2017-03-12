@@ -1,9 +1,23 @@
 import React from 'react'
+import {
+  Switch, 
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom'
 
-export const Routes = () => (
-  <div className='routes'>
-    <h1>Routes go here</h1>
-  </div>
+import Page from './containers/page'
+
+import Home from './views/Home'
+
+export const Routes = (props) => (
+  <Router>
+    <Switch className='routes'>
+      <Route
+        render={(renderProps) => (
+          <Home {...renderProps} {...props} />
+        )} />
+    </Switch>
+  </Router>
 )
 
-export default Routes
+export default Page(Routes)
