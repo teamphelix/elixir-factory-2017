@@ -2,6 +2,7 @@ defmodule Web.SocketHandler do
   @behaviour :cowboy_websocket_handler
 
   def init(_, _req, _opts) do
+     Process.register(self, :ws_handler)
     {:upgrade, :protocol, :cowboy_websocket}
   end
 
@@ -22,6 +23,7 @@ defmodule Web.SocketHandler do
   end
 
   def websocket_info(message, req, state) do
+    IO.puts "Handle info: " <> message
     {:reply, {:text, message}, req, state}
   end
 

@@ -14,8 +14,4 @@ defmodule WebTest do
     assert conn.state == :sent
     assert conn.status == 200
   end
-
-  test "the truth" do
-    assert 1 + 1 == 2
-  end
 end
