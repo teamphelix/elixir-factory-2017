@@ -27,7 +27,7 @@ defmodule Web do
   end
 
   def run do
-    {:ok, _} = Plug.Adapters.Cowboy.http Web.Router, []
+    # {:ok, _} = Plug.Adapters.Cowboy.http Web.Router, []
   end
 
   defp dispatch do

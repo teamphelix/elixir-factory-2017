@@ -22,7 +22,7 @@ defmodule Aq.Mixfile do
   # and cannot be accessed from applications inside the apps folder
   defp deps do
     [
-      {:exsync, "~> 0.1.3", only: :dev}
+      {:exsync, "~> 0.1.3", only: :dev},
     ]
   end
 end

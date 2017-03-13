@@ -25,7 +25,7 @@ defmodule Twytter.Mixfile do
   end
 
   defp applications(_) do
-      [:extwitter]
+      [:extwitter, :web,  :logger]
   end
 
   # Dependencies can be Hex packages:
@@ -47,6 +47,8 @@ defmodule Twytter.Mixfile do
   defp deps(_) do
     [
       {:extwitter, "~> 0.8.2"},
+      {:gen_stage, "~> 0.11"},
+      {:web, in_umbrella: true}
     ]
   end
 end

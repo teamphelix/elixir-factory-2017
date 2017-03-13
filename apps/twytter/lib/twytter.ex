@@ -1,18 +1,15 @@
 defmodule Twytter do
-  @moduledoc """
-  Documentation for Twytter.
-  """
 
-  @doc """
-  Hello world.
+alias Twytter.TweetService
+alias Twytter.TweetConsumer
+alias Twytter.TweetProdConsumer
 
-  ## Examples
+  def start do
+    {:ok, producer} = GenStage.start_link(TweetService, "#elixabot")
+    {:ok, prod_con} = GenStage.start_link(TweetProdConsumer, :ok)
+    {:ok, consumer} = GenStage.start_link(TweetConsumer, :ok)
 
-      iex> Twytter.hello
-      :world
-
-  """
-  def hello do
-    :world
+    GenStage.sync_subscribe(prod_con, to: producer, max_demand: 10)
+    GenStage.sync_subscribe(consumer, to: prod_con, max_demand: 5)
   end
 end

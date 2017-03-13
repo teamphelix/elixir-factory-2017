@@ -1,8 +1,8 @@
 defmodule Web.WsServer do
 
   def broadcast(data) do
-    {:ok, msg} = JSON.encode(data)
-    broadcast ws_server, { :message, msg }
+    {:ok, msg} = Poison.encode(data)
+    broadcast ws_server, { :message, data }
   end
 
   defp broadcast(nil, _), do: :wtf
@@ -11,17 +11,17 @@ defmodule Web.WsServer do
   end
 
   def start_link do
-    dispatch = :cowboy_router.compile([
-      {:_, [
-        {'/ws', Web.SocketHandler, []},
-        {:_, Web.Router, []}
-      ]}
-    ])
-    :cowboy.start_http :ws_listener, 100, [
-      {:port, 4001}
-    ], [
-      {:env, [{:dispatch, dispatch}]}
-    ]
+    # dispatch = :cowboy_router.compile([
+    #   {:_, [
+    #     {'/ws', Web.SocketHandler, []},
+    #     {:_, Web.Router, []}
+    #   ]}
+    # ])
+    # :cowboy.start_http :ws_listener, 100, [
+    #   {:port, 4001}
+    # ], [
+    #   {:env, [{:dispatch, dispatch}]}
+    # ]
   end
 
   def stop(_), do: :ok
