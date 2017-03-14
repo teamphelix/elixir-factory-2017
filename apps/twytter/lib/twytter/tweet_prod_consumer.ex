@@ -5,10 +5,14 @@ defmodule Twytter.TweetProdConsumer do
     {:producer_consumer, :ok}
   end
 
+  defp get_record(tweet) do
+    IO.inspect(tweet)
+    %{ }
+  end
+
   def handle_events(tweets, _from,  _state) do
-    for tweet <- tweets do
-      IO.puts tweet.text
-    end
-    {:noreply, tweets, :ok}
+     processed_tweets = tweets |> Enum.map(&get_record/1)
+
+    {:noreply, processed_tweets, :ok}
   end
 end
