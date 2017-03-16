@@ -2,6 +2,7 @@ defmodule Web.SocketHandler do
   @behaviour :cowboy_websocket_handler
 
   def init(_, _req, _opts) do
+    IO.puts "Called init in Web.SocketHandler"
      Process.register(self, :ws_handler)
     {:upgrade, :protocol, :cowboy_websocket}
   end
@@ -16,7 +17,7 @@ defmodule Web.SocketHandler do
   def websocket_handle({:text, "ping"}, req, state) do
     {:reply, {:text, "pong"}, req, state}
   end
-  
+
   def websocket_handle({:text, message}, req, state) do
     IO.puts(message)
     {:ok, req, state}

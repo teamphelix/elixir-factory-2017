@@ -1,13 +1,17 @@
 defmodule Web.WsServer do
 
   def broadcast(data) do
-    
+    IO.puts("Called broadcast in WsServer")
     {:ok, msg} = Poison.encode(data)
-    broadcast ws_server, { :message, data }
+    broadcast ws_server(), { :text, msg }
   end
 
-  defp broadcast(nil, _), do: :wtf
+  defp broadcast(nil, _) do
+    IO.puts("Broadcast called with nil pid")
+    :wtf
+  end
   defp broadcast(pid, msg) do
+    IO.puts msg
     send pid, msg
   end
 

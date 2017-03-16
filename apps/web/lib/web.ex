@@ -15,7 +15,7 @@ defmodule Web do
       Plug.Adapters.Cowboy.child_spec(
         :http, Web.Router, [], [
           port: 4001,
-          dispatch: dispatch
+          dispatch: dispatch()
         ])
     ]
 
