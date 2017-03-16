@@ -21,7 +21,7 @@ defmodule Web.Mixfile do
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
     [applications: applications(Mix.env), 
-      mod: {Web, []},
+      mod: {Web, [Web.WsServer]},
       env: [cowboy_port: 8080]]
   end
 

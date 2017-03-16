@@ -6,7 +6,6 @@ import { socketConnect } from '../redux/actions'
 export const withSocket = Wrapped => {
   class WithSocket extends Component {
     componentDidMount() {
-      console.log(this.props)
       this.props.connectSocket()
     }
 

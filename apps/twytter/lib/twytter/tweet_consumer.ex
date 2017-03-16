@@ -2,7 +2,7 @@ defmodule Twytter.TweetConsumer do
   require Web.WsServer
 
   use GenStage
-  def init(arg) do
+  def init(_arg) do
     {:consumer, %{}}
   end
 

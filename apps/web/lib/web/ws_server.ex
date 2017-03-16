@@ -1,37 +1,40 @@
 defmodule Web.WsServer do
+  use GenServer
 
-  def broadcast(data) do
-    IO.puts("Called broadcast in WsServer")
+  def start_link(topic, opts \\ []) do
+    GenServer.start_link(__MODULE__, topic, opts)
+  end
+
+  def subscribe(topic \\ "message") do
+    Registry.register(:ws_registry, topic, :socket)
+  end
+
+  def broadcast(data, topic \\ "message") do
     {:ok, msg} = Poison.encode(data)
-    broadcast ws_server(), { :text, msg }
+    Registry.dispatch(:ws_registry, topic, fn entries ->
+      for {pid, _} <- entries, do: send(pid, msg)
+    end)
   end
 
-  defp broadcast(nil, _) do
-    IO.puts("Broadcast called with nil pid")
-    :wtf
-  end
-  defp broadcast(pid, msg) do
-    IO.puts msg
-    send pid, msg
+  def messages_received(pid) do
+    GenServer.call(pid, :messages_received)
   end
 
-  def start_link do
-    # dispatch = :cowboy_router.compile([
-    #   {:_, [
-    #     {'/ws', Web.SocketHandler, []},
-    #     {:_, Web.Router, []}
-    #   ]}
-    # ])
-    # :cowboy.start_http :ws_listener, 100, [
-    #   {:port, 4001}
-    # ], [
-    #   {:env, [{:dispatch, dispatch}]}
-    # ]
+  def init(topic) do
+    Registry.start_link(:duplicate,topic,[])
+    {:ok, []}
   end
 
-  def stop(_), do: :ok
-
-  defp ws_server do
-    Process.whereis(:ws_handler)
+  def handle_info({:message, msg}, state) do
+    {:noreply, [msg|state]}
   end
+
+  def handle_info({:text, msg}, state) do
+    {:noreply, state}
+  end
+
+  def handle_call(:messages_received, _from, state) do
+    {:reply, Enum.reverse(state), state}
+  end
+
 end
