@@ -5,7 +5,7 @@ defmodule Db.Tweet do
   import Ecto.Query, only: [from: 2]
 
   schema "tweets" do
-    field :tweet_id, :integer, unique: true
+    field :tweet_id, :string, unique: true
     field :question, :string
     # field :user_id, :integer
     field :favorite_count, :integer
@@ -15,19 +15,19 @@ defmodule Db.Tweet do
 
   def first_or_create(tweet) do
     query = from t in Db.Tweet,
-            where: t.tweet_id == ^tweet.id,
+            where: t.tweet_id == ^tweet.id_str,
             select: t
-    
+
     new_tweet = %Db.Tweet{
-      tweet_id: tweet.id,
+      tweet_id: tweet.id_str,
       question: tweet.text,
       favorite_count: tweet.favorite_count
     }
     case Db.Repo.one(query) do
-      nil -> 
+      nil ->
         {:ok, saved_tweet} = Db.Repo.insert(new_tweet) # Create tweet
         saved_tweet
-      {:ok, model} -> model
+      model -> model
     end
   end
 

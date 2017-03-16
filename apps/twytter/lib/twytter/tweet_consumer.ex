@@ -22,15 +22,20 @@ defmodule Twytter.TweetConsumer do
   end
 
 
+  def to_jsonable(tweet) do
+    %{id: tweet.id, votes: tweet.favorite_count, text: tweet.question}
+  end
   def handle_events(events, from, producers) do
     producers = Map.update!(producers, from, fn {pending, interval} ->
       {pending + length(events), interval}
     end)
 
-    Web.WsServer.broadcast(events)
+    jsonable_tweets = events |> Enum.map(&to_jsonable/1)
+    Web.WsServer.broadcast(jsonable_tweets)
 
     {:noreply, [], producers}
   end
+
 
   def handle_info({:ask, from}, producers) do
     {:noreply, [], ask_and_schedule(producers, from)}

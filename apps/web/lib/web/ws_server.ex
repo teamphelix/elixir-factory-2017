@@ -1,6 +1,7 @@
 defmodule Web.WsServer do
 
   def broadcast(data) do
+    
     {:ok, msg} = Poison.encode(data)
     broadcast ws_server, { :message, data }
   end
