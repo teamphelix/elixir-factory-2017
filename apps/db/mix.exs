@@ -23,6 +23,10 @@ defmodule Db.Mixfile do
     [applications: applications(Mix.env), mod: {Db, []}]
   end
 
+  defp applications(:test) do
+    applications(:all) ++ [:extwitter]
+  end
+
   defp applications(_) do
       [:postgrex, :ecto, :logger]
   end
@@ -42,6 +46,11 @@ defmodule Db.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps(:dev) do
     deps(:all) ++ []
+  end
+  defp deps(:test) do
+    deps(:all) ++ [
+      {:extwitter, "~> 0.8.2", only: :test}
+    ]
   end
   defp deps(_) do
     [
