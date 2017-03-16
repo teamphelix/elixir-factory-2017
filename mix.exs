@@ -8,6 +8,21 @@ defmodule Aq.Mixfile do
      deps: deps()]
   end
 
+  def application do
+    # Specify extra applications you'll use from Erlang/Elixir
+    [applications: applications(Mix.env), 
+     mod: {Web, []},
+     env: [cowboy_port: 8080]]
+  end
+
+  defp applications(:dev) do
+    applications(:all) ++ []
+  end
+
+  defp applications(_) do
+    [:web]
+  end
+
   # Dependencies can be Hex packages:
   #
   #   {:my_dep, "~> 0.3.0"}
