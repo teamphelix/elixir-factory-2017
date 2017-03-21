@@ -1,1 +1,39 @@
 @import "./variables.css";
+
+:root {
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+}
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 100vh;
+  // position: relative;
+  // margin: 0 auto;
+
+  header {
+    margin: 0 auto;
+    background: $header_bg;
+    text-align: center;
+    color: $header_color;
+    font-size: 2.0em;
+    padding: 15px 0;
+  }
+
+  .questions_list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: $list_bg;
+    width: 100%;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 0 2px 1px rgba(0,0,0,0.2);
+  }
+}

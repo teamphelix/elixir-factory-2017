@@ -5,7 +5,12 @@ export const Question = ({question, onVote}) => {
     <div
       onClick={onVote.bind(this, question)}
       className='question'>
-      {question.votes} {question.text}
+      <span className="votes">
+        {question.votes}
+      </span>
+      <span className="text">
+        {question.text}
+      </span>
     </div>
   )
 }

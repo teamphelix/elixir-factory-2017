@@ -13,7 +13,7 @@ defmodule Web.SocketHandler do
     {:ok, req, state, @timeout}
   end
 
-  def websocket_handle({:message, "ping"}, req, state) do
+  def websocket_handle({:text, "ping"}, req, state) do
     {:reply, {:text, "pong"}, req, state}
   end
 
@@ -21,7 +21,7 @@ defmodule Web.SocketHandler do
     {:reply, {:text, message}, req, state}
   end
 
-  def websocket_handle({:text, message}, req, state) do
+  def websocket_handle({:ping, message}, req, state) do
     {:reply, {:text, "pong"}, req, state}
   end
 

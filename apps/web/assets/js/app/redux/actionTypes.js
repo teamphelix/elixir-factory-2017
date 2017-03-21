@@ -1,3 +1,4 @@
+export const PONG = 'PONG'
 export const SOCKET_CONNECT = 'SOCKET_CONNECT'
 export const SOCKET_CONNECTED = 'SOCKET_CONNECTED'
 
