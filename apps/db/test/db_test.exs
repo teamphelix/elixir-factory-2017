@@ -9,26 +9,21 @@ defmodule DbTest do
     :ok
   end
 
-  test "a new record contains a favorite_count of 0" do
-    new_question = %Db.Tweet{favorite_count: 0}
-    saved = Db.Repo.insert!(new_question)
-    assert saved.favorite_count == 0
+  defp query_for_tweet(tweet) do
+    from t in "tweets",
+      where: not(is_nil(t.tweet_id)) and t.tweet_id == ^tweet.id_str,
+      select: %{id: t.id}
   end
 
   test "creates a new question when id is new" do
-    created = Db.Tweet
+    Db.Tweet
       .first_or_create(%ExTwitter.Model.Tweet{
-        id: "12345",
-        id_str: "12345",
+        id_str: "test",
         text: "What do you think about Brail?",
         favorite_count: 0
       })
 
-    query = from t in "tweets",
-          where: not(is_nil(t.tweet_id)) and t.tweet_id == ^created.tweet_id,
-          select: %{id: t.id}
-
-    found_question = Db.Repo.one query
+    found_question = Db.Repo.one query_for_tweet(%{id_str: "test"})
     assert found_question != nil
   end
 

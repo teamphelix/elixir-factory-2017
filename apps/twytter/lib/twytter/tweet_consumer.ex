@@ -11,7 +11,6 @@ defmodule Twytter.TweetConsumer do
     interval = opts[:interval] || 90000
 
     producers = Map.put(producers, from, {pending, interval})
-
     producers = ask_and_schedule(producers, from)
 
     {:manual, producers}
