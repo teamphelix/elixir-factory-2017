@@ -21,8 +21,11 @@ defmodule Web.SocketHandler do
     {:reply, {:text, message}, req, state}
   end
 
-  def websocket_handle({:ping, message}, req, state) do
-    {:reply, {:text, "pong"}, req, state}
+  def websocket_handle(message, req, state) do
+    {:text, msg} = message
+    {:ok, data} = Poison.decode(msg)
+    # Do something with the data
+    {:reply, {:text, "OK"}, req, state}
   end
 
   def websocket_info(message, req, state) do

@@ -9,8 +9,6 @@ defmodule Web do
 
     # Define workers and child supervisors to be supervised
     children = [
-      # Starts a worker by calling: Web.Worker.start_link(arg1, arg2, arg3)
-      # worker(Web.Worker, [arg1, arg2, arg3]),
       supervisor(Registry, [:duplicate, :ws_registry]),
       Plug.Adapters.Cowboy.child_spec(
         :http, Web.Router, [], [

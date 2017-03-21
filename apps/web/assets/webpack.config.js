@@ -12,8 +12,6 @@ const autoprefixer = require("autoprefixer");
  * Configuration
  **/
 module.exports = (env='dev') => {
-  console.log(env)
-
   const prod = env === 'prod'
   const publicPath = 'http://localhost:8080/'
   const hot = 'webpack-hot-middleware/client?path=' +

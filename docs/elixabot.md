@@ -596,386 +596,231 @@ EEx.function_from_file :defp, :template_index, @index_template, [:env]
 
 ---
 
-
-## React
-
+Because all the cool kids are doing it...
 
 ---
 
-We all know code bases can get large quickly
-
-*some funny image of codebases
----
-
-The mix build tool allows us to split our code into multiple apps
-
----
-
-why?
-
-----
-
-Testability
-
----
-
-Manageability
-
----
-
-Development efficiency
-
----
-
-How do we do this?
-
----
-
-start a new mix project and pass in the umbrella flag
-
----
-
+```html
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Elixabot</title>
+</head>
+<body>
+    <div id="root"></div>
+    <%= if env == :dev do %>
+      <script src="http://localhost:8080/js/app.js"></script>
+    <% else %>
+      <script src="/js/app.js"></script>
+    <% end %>
+</body>
+</html>
 ```
-mix new --umbrella elixabot
+
+---
+
+
+* React
+* Webpack 2
+
+---
+
+```js
+const publicPath = 'http://localhost:8080/'
+  const hot = 'webpack-hot-middleware/client?path=' +
+    publicPath + '__webpack_hmr'
+
+  const entry = {
+    app: [
+      "js/app.js",
+      "css/app.css"
+    ]
+  }
+  if (!(env && env.prod)) {
+    // HOT RELOADING!
+    entry.app.unshift(hot)
+  }
+  // ...
+}
 ```
----
-This creates the following -
-
-
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%206.08.52%20PM.png)
 
 ---
 
+## App loading
+
+---
+
+```javascript
+ReactDOM.render(<App />, MOUNT)
 ```
-apps/ - where our sub (child) projects will reside
-config/ - where our umbrella projects configuration will live
+
+---
+
+## Redux 
+
+---
+
+```javascript
+export const socketConnect = () => dispatch => {
+  dispatch({ type: types.SOCKET_CONNECT });
+
+  const socket = new WebSocket(`ws://localhost:4001/ws`)
+  socket.onopen = () => {
+    dispatch({ type: types.SOCKET_CONNECTED });
+  }
+
+  socket.addEventListener('message', ({ data }) => {
+    try {
+      dispatch({
+        type: types.RECEIVED_QUESTIONS,
+        payload: JSON.parse(data)
+      })
+    } catch (e) {
+      console.log('error ->', e, data);
+    }
+  })
+}
 ```
----
-
-If we cd into our `apps` directory we can then create new apps using
-
-
-`mix new app_name`
-
----
-Looking at our current app you can see
-
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%206.20.16%20PM.png)
-
----
-How do  you interact with all the child applications ?
-
-Each mix application works as you would expect a standalone mix app would
 
 ---
 
-If we cd into  our root directory
-
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%206.08.52%20PM.png)
-
-We can interact with all 3 apps
+## What are we connecting to?
 
 ---
 
-running `iex -S mix` from the root directory of the umbrella app will allow you to interact with all  the child applications
+## Cowboy websocket
 
 ---
 
-Why do this?
+```elixir
+defmodule Web.SocketHandler do
+  @behaviour :cowboy_websocket_handler
 
-*Umbrella apps allow for a very elegant separation of concerns
-
-
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%206.20.16%20PM.png)
-
-----
-So this is cool but why else is this important?
-
-----
-
-We could isolate behavior
-
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%206.20.16%20PM.png)
-
----
-One app is speaking to twytter,
-
----
-one is saving and retreving from the db
-
-
----
-and one is handling the web socket connection.
-
----
-
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%206.20.16%20PM.png)
-
-Even at first glance, it is very clear what is going on here
-
----
-
-Umbrella app == smaller child apps == easier testing!
-
-----
-
-We were able to test drive development pretty easily with ExUnit.
-
----
-
-Write tests in tiny pieces
-
----
-```  
-test "a new record contains a favorite_count of 0" do
-    new_question = %Db.Tweet{favorite_count: 0}
-    saved = Db.Repo.insert!(new_question)
-    assert saved.favorite_count == 0
+  def init(_, _req, _opts) do
+    Web.WsServer.subscribe()
+    {:upgrade, :protocol, :cowboy_websocket}
   end
+
+  def websocket_handle({:text, "ping"}, req, state) do
+    {:reply, {:text, "pong"}, req, state}
+  end
+
+  def websocket_handle({:message, message}, req, state) do
+    {:reply, {:text, message}, req, state}
+  end
+	
+  # ...
+end
 ```
 
+---
 
-
-We only needed to be concerned with what was happening in the database
+## Sending data from client to server
 
 ---
 
-This lead to Isolated functionality
-
-making it easier for us to think about where to put what code
-
----
-
-Elixir allows/forces us to be really specfic
----
-
-*Transition from umbrella apps to pattern matching - from a high level we separate concerns by separating apps
-
-Yet we see this intentional focus on isolation throughout the language. Let's take another look at how this kidn of intentional isolation is a plus in message passing
-
----
-
-Twytter (yes, the name could be better)
-
----
-
-### #elixabot (any interesting questions yet?)
-___
-
-
-The job of this app is to retreive tweets from twitter
-
-
----
-How do we do this?
-
----
-
-# Genstage
-
----
-New behaviour for exchanging events using back pressure between elixir processes
-
----
-
-BackPressure?
-
-![](http://www.ctgclean.com/sites/www.ctgclean.com/files/tech-blog/wp-content/uploads/Backpressure-Limiting-Valve.jpg)
-
-
-no more can go into the system then the system can handle
-
-----
-
-Why is this important?
-
-___
-
-
-I love lucy...
-
----
-
-![](https://engineering.spreedly.com/images/how-do-i-genstage/lucy1-31af5325.gif)
-![](https://engineering.spreedly.com/images/how-do-i-genstage/lucy2-71f114af.gif)
-![](
-https://engineering.spreedly.com/images/how-do-i-genstage/lucy3-48d13a32.gif)
-
----
-
+```javascript
+socket.send(JSON.stringify({message: "c major"}))
 ```
-defmodule Twytter do
+```elixir
+def websocket_handle(message, req, state) do
+  {:text, msg} = message
+  {:ok, data} = Poison.decode(msg)
+  # Do something with the data
+  {:reply, {:text, "OK"}, req, state}
+end
+```
 
-alias Twytter.TweetService
-alias Twytter.TweetConsumer
-alias Twytter.TweetProdConsumer
+## Sending server to client
 
-  def start do
-    {:ok, producer} = GenStage.start_link(TweetService, "#elixabot")
-    {:ok, prod_con} = GenStage.start_link(TweetProdConsumer, :ok)
-    {:ok, consumer} = GenStage.start_link(TweetConsumer, :ok)
+---
 
-    GenStage.sync_subscribe(prod_con, to: producer, max_demand: 10)
-    GenStage.sync_subscribe(consumer, to: prod_con, max_demand: 5)
+Need to keep track of the connected clients
+
+---
+
+```elixir
+supervisor(Registry, [:duplicate, :ws_registry]),
+```
+
+---
+
+```elixir
+def init(_, _req, _opts) do
+  # on socket connect
+  Web.WsServer.subscribe()
+  {:upgrade, :protocol, :cowboy_websocket}
+end
+```
+
+---
+
+Subscribing looks like...
+
+---
+
+```elixir
+defmodule Web.WsServer do
+  use GenServer
+
+  def start_link(topic, opts \\ []) do
+    GenServer.start_link(__MODULE__, topic, opts)
+  end
+
+  def subscribe(topic \\ "message") do
+    Registry.register(:ws_registry, topic, :socket)
   end
 end
 ```
-----
-
-3 separate processes
 
 ---
 
-Producer
-
- retreives tweets from twitter passes them to prodcon
-
-```
- {:ok, producer} =
- GenStage.start_link(TweetService, "#elixabot")
- ```
----
-
-```
-defmodule Twytter.TweetService do
-  use GenStage
-
-  def init(hashtag) do
-    {:producer, %{hashtag: hashtag, last_tweet: nil}}
-  end
-```  
----
-
-Callback
-
-That first argument demand, is actually set by the consumer
-
-```
-def handle_demand(demand, %{hashtag: hashtag, last_tweet: last_tweet}) do
-  opts = [count: demand]
-  opts = case last_tweet do
-  %ExTwitter.Model.Tweet{id_str: id} -> Keyword.put(opts, :since_id, id)
-  _ -> opts
-  end
-
-  tweets = ExTwitter.search(hashtag, opts)
-  last_tweet = List.last(tweets)
-  {:noreply, tweets, %{last_tweet: last_tweet, hashtag: hashtag}}
-end    
-```
-
-explain demaind and return value of function
-
-----
-
-Producer Consumer
-
-  Saves tweets to database and passes saved and updated tweets to consumer
-
-```
-  {:ok, prod_con} = GenStage.start_link(TweetProdConsumer, :ok)
-
-```
+Broadcasting to our connected clients
 
 ---
-```
-defmodule Twytter.TweetProdConsumer do
-  require Db.Tweet
-  use GenStage
 
-  def init(arg) do
-    {:producer_consumer, :ok}
-  end
+```elixir
+def broadcast(data, topic \\ "message") do
+  {:ok, msg} = Poison.encode(data)
+  Registry.dispatch(:ws_registry, topic, fn entries ->
+    for {pid, _} <- entries, do: send(pid, msg)
+  end)
 end
 ```
----
-
-```
-  def handle_events(tweets, _from,  _state) do
-  processed_tweets = tweets |> Enum.map(&get_record/1)
-
-  {:noreply, processed_tweets, :ok}
-  end
-```   
-
-passes processed tweets over to consumer
-
 
 ---
 
-Consumer
+## on the client
 
-```
- {:ok, consumer} = GenStage.start_link(TweetConsumer, :ok)
+---
 
+```javascript
+socket.addEventListener('message', ({ data }) => {
+  try {
+    dispatch({
+      type: types.RECEIVED_QUESTIONS,
+      payload: JSON.parse(data)
+    })
+  } catch (e) {
+    console.log('error ->', e, data);
+  }
+})
 ```
 
-----
-
-what is happenign in handle subscribe and handle info)
-```
-defmodule Twytter.TweetConsumer do
-  require Web.WsServer
-
-  use GenStage
-  def init(_arg) do
-    {:consumer, %{}}
-  end
-
-  def handle_subscribe(:producer, opts, from, producers) do
-    pending = opts[:max_demand] || 5
-    interval = opts[:interval] || 90000
-
-    producers = Map.put(producers, from, {pending, interval})
-
-    producers = ask_and_schedule(producers, from)
-
-    {:manual, producers}
-  end
-
-    defp ask_and_schedule(producers, from) do
-    case producers do
-      %{^from => {pending, interval}} ->
-        GenStage.ask(from, pending)
-        Process.send_after(self(), {:ask, from}, interval)
-        Map.put(producers, from, {0, interval})
-      %{} ->
-        producers
-    end
-
-```  
 ---
 
-```  
-def handle_info({:ask, from}, producers) do
-  {:noreply, [], ask_and_schedule(producers, from)}
-end
-```
----
-
-```
-GenStage.sync_subscribe(prod_con, to: producer, max_demand: 10)
-GenStage.sync_subscribe(consumer, to: prod_con, max_demand: 5)
-```
-
-
-Our consumer sits at the end of the message queue. It subscribes to our producer consumer, which subscribes to our producer
-
-You see the `max_demand: 5` argument -
-
-The consumer  set the demaning for the systesm
-There will never be more than 5 messages pulled from twitter at a time, because the consumer has set that it cannot receive more than 5.
+Then handle the normal redux workflow
 
 ---
 
-this type of message passing not only allows is to really isolate which part of the process is doing what, but it also allows us to carefully control the flow of messages.
+## Topics covered
 
----
-
-We've talked abotu Elixir allowing apps at a high-level, and then processes, let's step a bit lower and talk about Pattern matching and how its realted to this theme of isolation
-
----
-
-Looking back at our Twytter app
-
----
+* GenServer
+* GenStage
+* Small modules
+* Supervisors (TODO)
+* 

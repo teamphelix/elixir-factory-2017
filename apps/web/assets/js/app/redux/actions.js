@@ -10,7 +10,6 @@ export const socketConnect = () => dispatch => {
     socket.send('ping')
   }
 
-
   socket.addEventListener('message', ({ data }) => {
     try {
       if (data === "pong") {
