@@ -19,12 +19,13 @@ defmodule DbTest do
     created = Db.Tweet
       .first_or_create(%ExTwitter.Model.Tweet{
         id: "12345",
+        id_str: "12345",
         text: "What do you think about Brail?",
         favorite_count: 0
       })
 
     query = from t in "tweets",
-          where: t.tweet_id == ^created.tweet_id,
+          where: not(is_nil(t.tweet_id)) and t.tweet_id == ^created.tweet_id,
           select: %{id: t.id}
 
     found_question = Db.Repo.one query
@@ -44,6 +45,7 @@ defmodule DbTest do
     question = Db.Tweet
       .first_or_create(%ExTwitter.Model.Tweet{
         id: "12345",
+        id_str: "12345",
         text: "What do you think about Rails?",
         favorite_count: 0
       })
