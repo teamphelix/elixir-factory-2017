@@ -1,12 +1,24 @@
 require('./remark-latest.min')
 require('./index.css')
+require('./timeline.css')
 
 const app = document.createElement('main');
 document.body.appendChild(app)
 
-// import {
-//   Markdown,
-// } from 'spectacle';
+// TODO:
+const appendGenStage = () => {
+  const genstage_html = '<ul class="genstage"><li class="stage active">Web</li><li class="stage">DB</li><li class="stage">Twitter</li></ul>'
+
+  const div = document.createElement('div')
+  div.className = 'genstage_container'
+  div.innerHTML = genstage_html
+  // const slide = document.querySelector('.remark-visible')
+  document.body.appendChild(div)
+  // console.log(slide)
+  // console.log(slides)
+  // slides.forEach(ele => ele.appendChild(div))
+}
+
 let show;
 const createSlideshow = (md) => {
   show = remark.create({
@@ -26,27 +38,3 @@ if (module.hot) {
 
 const md = require('./elixabot.md')
 createSlideshow(md)
-
-// import { join } from 'path'
-// import { readFileSync } from 'fs'
-// import { createServer } from 'http';
-// import md2remark from 'md2remark';
-
-// const md = require('./elixabot.md')
-
-// const getMarkdown = (file=join(__dirname, '..', 'elixabot.md')) => {
-
-//   const contents = readFileSync(__dirname + "/elixabot.md");
-//   const markdown = contents.toString();
-
-//   return md2remark(markdown)
-// }
-
-// const port = process.env.PORT || 3000;
-
-// createServer(async (req, res) => {
-//   const md = await getMarkdown()
-//   console.log('Request!', md);
-//   res.end(md);
-// })
-// .listen(port, () => console.log(`Server running on port ${port}`));

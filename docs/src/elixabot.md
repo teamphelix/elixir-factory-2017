@@ -528,12 +528,27 @@ GenStage.sync_subscribe(prod_con, to: producer, max_demand: 10)
 GenStage.sync_subscribe(consumer, to: prod_con, max_demand: 5)
 ```
 
-
 ---
+
+class: show_genstage
+
+<ul class="genstage">
+  <li class="stage active">Web</li>
+  <li class="stage">DB</li>
+  <li class="stage">Twitter</li>
+</ul>
 
 ## Web (tweet consumer)
 
 ---
+
+class: show_genstage
+
+<ul class="genstage">
+  <li class="stage active">Web</li>
+  <li class="stage">DB</li>
+  <li class="stage">Twitter</li>
+</ul>
 
 Since we want to play nice to Twitter, we need to control our desires... aka manage demand pressure
 
@@ -542,6 +557,14 @@ Since we want to play nice to Twitter, we need to control our desires... aka man
 ![](/Users/anna/Desktop/client-meme.jpg)
 
 ---
+
+class: show_genstage
+
+<ul class="genstage">
+  <li class="stage active">Web</li>
+  <li class="stage">DB</li>
+  <li class="stage">Twitter</li>
+</ul>
 
 ```elixir
 def handle_subscribe(:producer, opts, from, producers) do
@@ -556,6 +579,14 @@ end
 ```
 
 ---
+
+class: show_genstage
+
+<ul class="genstage">
+  <li class="stage active">Web</li>
+  <li class="stage">DB</li>
+  <li class="stage">Twitter</li>
+</ul>
 
 ```elixir
 defmodule Twytter.TweetConsumer do
@@ -578,9 +609,25 @@ end
 
 ---
 
+class: show_genstage
+
+<ul class="genstage">
+  <li class="stage">Web</li>
+  <li class="stage active">DB</li>
+  <li class="stage">Twitter</li>
+</ul>
+
 ## DB Producer Consumer
 
 ---
+
+class: show_genstage
+
+<ul class="genstage">
+  <li class="stage">Web</li>
+  <li class="stage active">DB</li>
+  <li class="stage">Twitter</li>
+</ul>
 
 ```elixir
 defmodule Twytter.TweetProdConsumer do
@@ -604,6 +651,14 @@ end
 Now, to get the tweets (Finally)
 
 ---
+
+class: show_genstage
+
+<ul class="genstage">
+  <li class="stage">Web</li>
+  <li class="stage">DB</li>
+  <li class="stage active">Twitter</li>
+</ul>
 
 ```elixir
 defmodule Twytter.TweetService do
