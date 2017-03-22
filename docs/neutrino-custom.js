@@ -8,6 +8,4 @@ module.exports = neutrino => {
     .rule('css')
     .test(/\.css$/)
     .loader('postcss', 'postcss-loader')
-
-  console.log(neutrino.config.module.rule('css'));
 }

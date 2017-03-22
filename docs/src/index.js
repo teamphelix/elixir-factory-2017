@@ -1,23 +1,31 @@
 require('./remark-latest.min')
 require('./index.css')
 
-import React from 'react'
-import ReactDOM from 'react-dom'
 const app = document.createElement('main');
 document.body.appendChild(app)
 
 // import {
 //   Markdown,
 // } from 'spectacle';
+let show;
+const createSlideshow = (md) => {
+  show = remark.create({
+    source: md,
+    highlightStyle: 'monokai',
+    highlightLines: true,
+    highlightLanguage: 'elixir'
+  })
+}
+
+if (module.hot) {
+  module.hot.accept('./elixabot.md', () => {
+    const nextMd = require('./elixabot.md')
+    createSlideshow(nextMd)
+  })
+}
 
 const md = require('./elixabot.md')
-
-const show = remark.create({
-  source: md,
-  highlightStyle: 'monokai',
-  highlightLines: true,
-  highlightLanguage: 'elixir'
-})
+createSlideshow(md)
 
 // import { join } from 'path'
 // import { readFileSync } from 'fs'

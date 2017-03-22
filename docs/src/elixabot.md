@@ -1,129 +1,183 @@
+name: Title
+class: font-title
+
+
 How we write better programs with Elixir
 
 ---
+name: Who are we
+class: font-title
 
-Who are we
+Who are we??
 
 ---
-
+name: Ari + Anna
+class: font-title
 Ari + Anna
 
 ---
+name: Ginger
+class: font-title
 
 Insert Ginger photo here
 
 ---
+name: elixir helps us
+class: font-title
 
 How elixir helps us write better software
 
 ---
+name: elixabot
+class: font-title
 
-INSERT A BUNCH OF SLIDES INTRODUCING THE IDEA
-
----
-
-Introduce the app
+# #Elixabot
 
 ---
+name: quick prototyping
+class: font-title
 
-### Quick prototyping
+.font-title[Quick Prototyping]
 
-fun fact - 1.5 working days to real-time system with Twitter, sockets, and React without a framework
+Fun Fact - 1.5 working days to real-time system.
+---
+name: what we used  
+class: font-title
+
+ Twitter + Sockets + React
+
+  ~~No framework~~
 
 ---
+name: how did we accomplish that?
+class: font-title
 
 How did we accomplish that?
 
 ---
+name: how did we accomplish that?
+class: font-title
 
 Elixir gave us that power
 
 ---
+name: Elixir gives us power
+class: font-title
 
 Like any good app, we want to do design driven development
 
-___
+---
+name: how did we accomplish that?
+class: font-title
 
 Umbrella apps force quality design
 
 ---
+name: What does that get us
+class: font-title
 
-So in building this app, what do we need?
-
----
-
-We came up with
+What does this way get us?
 
 ---
+name: small modules
+class: font-title
 
-A Twytter streammer + Rate limiting
-
----
-
-A web interface
+Small Modules
 
 ---
+name: Dependency Management
+class: font-title
 
-A Database
-___
-
-So let's get started
-___
-
-We are going to use the mix build tool to create our app
+Dependency Management
 
 ---
-
-```bash
-mix new --umbrella elixabot
-cd elixabot/apps
-mix new db --sup
-mix new db --sup
-mix new db --web
-```
-___
-
-Looking at our current app you see our umbrella + children
-
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%206.20.16%20PM.png)
-
----
-
-What does setting up our app this way get us?
-
----
-
-Small modules
-
----
-
-dependency management
-
----
+name: Dependency Management
+class: font-title
 
 TDD/BDD
 
 ---
+name: Dependency Management
+class: font-title
 
 Isolated Functionality
 
 ---
+name: Dependency Management
+class: font-title
 
-Let's set up our DB app and see how some of these concepts are applied
+Features of a monolithic app
+
+ +
+
+Benefits of microservices
+---
+name: What do we need?
+class: font-title
+To build this app, what do we need?
+
+---
+name: Our 3 apps
+class: font-title
+
+A Twytter streamer
+
++
+
+A web interface
+
++
+
+A Database
+---
+name: So let's get started
+class: font-title
+
+So let's get started
+---
+name: Mix Build tool
+class: font-title
+
+We use the mix build tool
+
+to create our app
+
+---
+name: Current App
+class: font-title
+
+Looking at our current app you see...
 
 ---
 
-This app will save tweets and update vote counts
+![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%206.20.16%20PM.png)
 
 ---
+name: Set up DB
+class: font-title
 
-In order to get started we need our dependencies.
+Let's set up our DB app
+---
+name: Save tweets and update votes
+class: font-title
+
+It will save tweets + update vote counts
 
 ---
+name: Need dependencies
+class: font-title
 
-Here we need `postgres` and `ecto`
+To start we need our dependencies.
 
 ---
+name: Postgres + ecto
+class: font-title
+
+`postgres` + `ecto`
+
+---
+name: Show deps
+class: background-blk 
 
 Let's add these to our mix.exs file
 
@@ -137,7 +191,7 @@ Let's add these to our mix.exs file
   end  
 
 ```
-___
+---
 
 then run
 
@@ -166,7 +220,7 @@ Smarter tools allow us to build smarter apps
 
 ---
 
-#smartertools
+# #smartertools
 
 ---
 
@@ -186,6 +240,10 @@ Just Ask Dave Thomas
 
 ---
 
+And you probably can...cause he's here
+
+---
+
 In Elixir, testing is a core feature
 
 ---
@@ -196,7 +254,7 @@ It's not an afterthought
 
 Let's take a look at Test Unit Integration
 
-___
+---
 
 We want to DB app make sure our vote count is being set accurately
 
@@ -238,7 +296,25 @@ Then we implement the functionality to make it pass
 
 ---
 
-TODO: Add functionality
+```elixir
+  def first_or_create(tweet) do
+    query = from t in Db.Tweet,
+            where: t.tweet_id == ^tweet.id_str,
+            select: t
+
+    new_tweet = %Db.Tweet{
+      tweet_id: tweet.id_str,
+      question: tweet.text,
+      favorite_count: tweet.favorite_count
+    }
+    case Db.Repo.one(query) do
+      nil ->
+        {:ok, saved_tweet} = Db.Repo.insert(new_tweet) # Create tweet
+        saved_tweet
+      model -> model
+    end
+  end
+```  
 
 ---
 
@@ -251,12 +327,54 @@ TODO: Add functionality
 This gives us the confidence that our code is working
 
 ---
+Before we move on to our Twytter app
+---
+let's take a look at a powerful feature of elixir
+---
+Pattern matching
+---
+```elixir
+case Db.Repo.one(query) do
+  nil ->
+    {:ok, saved_tweet} = Db.Repo.insert(new_tweet) # Create tweet
+    saved_tweet
+  model -> model
+end
+```
+---
+Why is this important?
 
+---
+
+Easily understandable as to what is going on
+
+---
+
+Declarative code
+
+---
+
+Prevents complicated conditionals
+
+---
+
+Compiler helps prevent data-type collisions
+
+---
+
+Pattern matching allows you to deal with data in small pieces.
+
+
+---
 Let's take a look at our Twytter app
 
 ---
 
-Bake to our high level diagram
+Back to our high level diagram
+
+---
+
+![](/Users/anna/Desktop/high_level_overview.jpg)
 
 ---
 
@@ -278,7 +396,7 @@ Pulling from Twitter
 
 ---
 
-Fetching tweets with Elixir is easy (Thanks ExTwitter)
+Fetching tweets with Elixir is easy (Thanks @parroty/ExTwitter)
 
 ---
 
@@ -350,6 +468,10 @@ Looking at the design
 
 ---
 
+![](/Users/anna/Desktop/high_level_overview.jpg)
+
+---
+
 1. Fetch tweets
 2. Check DB and persist questions
 3. Send to web
@@ -364,9 +486,7 @@ This looks like a flow diagram
 
 ---
 
-1. Consume from Twitter
-2. Persist in DB
-3. Send to web
+Yet what if we flipped the direction of the flow?
 
 ---
 
@@ -374,7 +494,15 @@ This looks like a flow diagram
 
 ---
 
-TODO: Why go backwards?
+Why go backwards?
+---
+
+![](/Users/anna/Desktop/lucy1.gif)
+![](/Users/anna/Desktop/lucy2.gif)
+![](/Users/anna/Desktop/lucy3.gif)
+
+---
+
 Backpressure / control
 
 ---
@@ -383,12 +511,25 @@ Backpressure / control
 2. Pull from Twitter
 
 ---
-
-
-We'll _pull_ demand from Twitter into our Web interface
-
+30,000 ft view
 ---
 
+
+---
+How is this backwards system setup?
+---
+
+```elixir
+{:ok, producer} = GenStage.start_link(TweetService, "#elixabot")
+{:ok, prod_con} = GenStage.start_link(TweetProdConsumer, :ok)
+{:ok, consumer} = GenStage.start_link(TweetConsumer, :ok)
+
+GenStage.sync_subscribe(prod_con, to: producer, max_demand: 10)
+GenStage.sync_subscribe(consumer, to: prod_con, max_demand: 5)
+```
+
+
+---
 
 ## Web (tweet consumer)
 
@@ -398,7 +539,7 @@ Since we want to play nice to Twitter, we need to control our desires... aka man
 
 ---
 
-![](http://www.onlymyhealth.com/imported/images/2013/January/10_Jan_2013/Control-Your-Desire-for-Food-for-Weight-Loss.jpg)
+![](/Users/anna/Desktop/client-meme.jpg)
 
 ---
 
@@ -491,23 +632,8 @@ end
 ## Separation of concerns
 
 1. Tweet producer
-2. Db producter/consumer
+2. Db producer/consumer
 3. Web consumer
-
----
-
-How does this all fit together?
-
----
-
-```elixir
-{:ok, producer} = GenStage.start_link(TweetService, "#elixabot")
-{:ok, prod_con} = GenStage.start_link(TweetProdConsumer, :ok)
-{:ok, consumer} = GenStage.start_link(TweetConsumer, :ok)
-
-GenStage.sync_subscribe(prod_con, to: producer, max_demand: 10)
-GenStage.sync_subscribe(consumer, to: prod_con, max_demand: 5)
-```
 
 ---
 
@@ -588,15 +714,6 @@ end
 
 ---
 
-Precomputing our template (need for speed)
-
-```elixir
-@index_template Application.app_dir(:web, "priv/views/index.html.eex")
-EEx.function_from_file :defp, :template_index, @index_template, [:env]
-```
-
----
-
 Because all the cool kids are doing it...
 
 ---
@@ -661,7 +778,7 @@ ReactDOM.render(<App />, MOUNT)
 
 ---
 
-## Redux 
+## Redux
 
 ---
 
@@ -712,7 +829,7 @@ defmodule Web.SocketHandler do
   def websocket_handle({:message, message}, req, state) do
     {:reply, {:text, message}, req, state}
   end
-	
+
   # ...
 end
 ```
@@ -736,6 +853,10 @@ end
 ```
 
 ## Sending server to client
+
+---
+
+## Broadcasting to our connected clients
 
 ---
 
@@ -779,9 +900,6 @@ end
 
 ---
 
-## Broadcasting to our connected clients
-
----
 
 ```elixir
 def broadcast(data, topic \\ "message") do
@@ -790,24 +908,6 @@ def broadcast(data, topic \\ "message") do
     for {pid, _} <- entries, do: send(pid, msg)
   end)
 end
-```
-
----
-
-## on the client
-
----
-
-```javascript
-socket.addEventListener("message", ({ data }) => {
-  try {
-    dispatch({
-      type: types.RECEIVED_QUESTIONS,
-      payload: JSON.parse(data)
-    })
-  } catch (e) {
-  }
-})
 ```
 
 ---
@@ -838,4 +938,4 @@ export const reducer = (state = initialState, action) => {
 * GenStage
 * Small modules
 * Supervisors (TODO)
-* 
+*

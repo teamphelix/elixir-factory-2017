@@ -32,7 +32,9 @@
     "neutrino-preset-react": "^4.2.3",
     "neutrino-preset-web": "^4.2.3",
     "nodemon": "^1.11.0",
+    "postcss-extend": "^1.0.5",
     "postcss-import": "^9.1.0",
+    "postcss-inherit": "^4.0.3",
     "precss": "^1.4.0",
     "raw-loader": "^0.5.1"
   }

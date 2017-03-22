@@ -2,6 +2,9 @@
 @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
 @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
+$bg: #ffffff;
+$blk: #000000;
+
 body { font-family: 'Droid Serif'; }
 h1, h2, h3 {
   font-family: 'Yanone Kaffeesatz';
@@ -13,4 +16,40 @@ h1, h2, h3 {
 
 .remark-container {
   background-color: $bg;
+}
+
+.remark-slide-scaler {
+  -webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+
+.remark-slides-area{
+  background: $bg;
+  .remark-slide-content {
+      background: $bg;
+      text-align: center;
+      vertical-align: middle;
+      font-family: sans-serif;
+  }
+}
+
+.background-blk {
+  .remark-slides-area {
+    .remark-slide-content {
+      background: $blk;
+    }
+
+  }
+}
+
+
+.font-title {
+  font-size: 33px;
+  font-weight: bold;
+}
+
+.background-blk{
+  background: $blk;
 }

@@ -17,19 +17,23 @@ defmodule Db.Tweet do
     query = from t in Db.Tweet,
             where: t.tweet_id == ^tweet.id_str,
             select: t
+            
+    create_tweet({Db.Repo.one(query), tweet})
+  end
 
+  defp create_tweet({ nil, tweet }) do
     new_tweet = %Db.Tweet{
       tweet_id: tweet.id_str,
       question: tweet.text,
       favorite_count: tweet.favorite_count
     }
-    case Db.Repo.one(query) do
-      nil ->
-        {:ok, saved_tweet} = Db.Repo.insert(new_tweet) # Create tweet
-        saved_tweet
-      model -> model
-    end
+
+    {:ok, saved_tweet} = Db.Repo.insert(new_tweet)
+    saved_tweet
   end
+
+  defp create_tweet({ instance, _ }), do: instance
+
 
   def update_votes(tweet, new_vote_count \\ 0) do
     case tweet.favorite_count == new_vote_count do
