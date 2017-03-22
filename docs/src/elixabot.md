@@ -41,6 +41,7 @@ Elixir gave us that power
 ---
 
 Like any good app, we want to do design driven development
+
 ___
 
 Umbrella apps force quality design
@@ -126,7 +127,7 @@ Here we need `postgres` and `ecto`
 
 Let's add these to our mix.exs file
 
-```
+```elixir
 
   defp deps(_) do
     [
@@ -630,9 +631,9 @@ Because all the cool kids are doing it...
 ---
 
 ```js
-const publicPath = 'http://localhost:8080/'
-  const hot = 'webpack-hot-middleware/client?path=' +
-    publicPath + '__webpack_hmr'
+const publicPath = "http://localhost:8080/"
+  const hot = "webpack-hot-middleware/client?path=" +
+    publicPath + "__webpack_hmr"
 
   const entry = {
     app: [
@@ -673,14 +674,13 @@ export const socketConnect = () => dispatch => {
     dispatch({ type: types.SOCKET_CONNECTED });
   }
 
-  socket.addEventListener('message', ({ data }) => {
+  socket.addEventListener("message", ({ data }) => {
     try {
       dispatch({
         type: types.RECEIVED_QUESTIONS,
         payload: JSON.parse(data)
       })
     } catch (e) {
-      console.log('error ->', e, data);
     }
   })
 }
@@ -759,7 +759,7 @@ end
 
 ---
 
-Subscribing looks like...
+## Subscribing looks like...
 
 ---
 
@@ -779,7 +779,7 @@ end
 
 ---
 
-Broadcasting to our connected clients
+## Broadcasting to our connected clients
 
 ---
 
@@ -799,21 +799,36 @@ end
 ---
 
 ```javascript
-socket.addEventListener('message', ({ data }) => {
+socket.addEventListener("message", ({ data }) => {
   try {
     dispatch({
       type: types.RECEIVED_QUESTIONS,
       payload: JSON.parse(data)
     })
   } catch (e) {
-    console.log('error ->', e, data);
   }
 })
 ```
 
 ---
 
-Then handle the normal redux workflow
+Then handle the normal redux workflow. for instance...
+
+---
+
+```javascript
+export const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case types.RECEIVED_QUESTIONS:
+      return {
+        ...state,
+        list: action.payload,
+      }
+    default:
+      return state
+  }
+}
+```
 
 ---
 

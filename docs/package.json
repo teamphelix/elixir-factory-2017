@@ -1,0 +1,39 @@
+{
+  "name": "elixabot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "config": {
+    "presets": [
+      "neutrino-preset-web",
+      "neutrino-preset-react",
+      "neutrino-custom"
+    ]
+  },
+  "scripts": {
+    "start": "neutrino start --presets neutrino-preset-web",
+    "build": "neutrino build --presets neutrino-preset-web"
+  },
+  "dependencies": {
+    "html-loader": "^0.4.5",
+    "markdown-loader": "^2.0.0",
+    "md2remark": "^0.1.5",
+    "postcss-loader": "^1.3.3",
+    "remark": "^7.0.0",
+    "source-map-support": "^0.4.14",
+    "spectacle": "^2.0.0",
+    "style-loader": "^0.15.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "markdown-loader": "^2.0.0",
+    "neutrino": "^4.3.1",
+    "neutrino-preset-node": "^4.2.2",
+    "neutrino-preset-react": "^4.2.3",
+    "neutrino-preset-web": "^4.2.3",
+    "nodemon": "^1.11.0",
+    "postcss-import": "^9.1.0",
+    "precss": "^1.4.0",
+    "raw-loader": "^0.5.1"
+  }
+}
