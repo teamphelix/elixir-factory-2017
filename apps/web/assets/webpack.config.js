@@ -13,11 +13,12 @@ const autoprefixer = require("autoprefixer");
  **/
 module.exports = (env='dev') => {
   const prod = env === 'prod'
+  const isDev = env === 'dev';
+  
   const publicPath = 'http://localhost:8080/'
   const hot = 'webpack-hot-middleware/client?path=' +
     publicPath + '__webpack_hmr'
 
-  const isDev = !(env && !prod);
   const devtool = isDev ? "cheap-module-eval-source-map" : "source-map";
   const entry = {
     app: [
