@@ -17,7 +17,7 @@ module.exports = (env='dev') => {
   const hot = 'webpack-hot-middleware/client?path=' +
     publicPath + '__webpack_hmr'
 
-  const isDev = !(env && env.prod);
+  const isDev = !(env && !prod);
   const devtool = isDev ? "cheap-module-eval-source-map" : "source-map";
   const entry = {
     app: [
@@ -41,7 +41,7 @@ module.exports = (env='dev') => {
     })
   ]
 
-  if (env === 'dev') {
+  if (isDev) {
     plugins.push(new webpack.HotModuleReplacementPlugin())
   } else {
     plugins = plugins.concat([

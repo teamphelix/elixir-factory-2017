@@ -21,7 +21,10 @@ defmodule Twytter.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [applications: applications(Mix.env), mod: []]
+    [
+      applications: applications(Mix.env), 
+      mod: {Twytter, ["#elixabot"]}
+    ]
   end
 
   defp applications(_) do
@@ -47,9 +50,7 @@ defmodule Twytter.Mixfile do
   defp deps(_) do
     [
       {:extwitter, "~> 0.8.2"},
-      {:gen_stage, "~> 0.11"},
-      {:web, in_umbrella: true},
-      {:db, in_umbrella: true}
+      {:gen_stage, "~> 0.11"}
     ]
   end
 end
