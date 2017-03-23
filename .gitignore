@@ -21,3 +21,5 @@ erl_crash.dump
 .env
 node_modules
 build
+apps/web/priv/static/css
+apps/web/priv/static/js/app.js.map
