@@ -1,16 +1,16 @@
-$color-primary: #ad98C3;
+$color-primary: orange;
 $color-secondary: #333;
-$color-active: green;
+$color-active: #111111;
 $color-text: #cccccc;
 $color-bg: #eee;
 
 $dot-size: 18px;
 
 .show_genstage {
-  p {
-    margin-left: 10%;
+  p, pre code {
+    margin-left: 15%;
   }
-  
+
   ul.genstage {
     min-height: 250px;
     display: block;

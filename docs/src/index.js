@@ -25,8 +25,14 @@ const createSlideshow = (md) => {
     source: md,
     highlightStyle: 'monokai',
     highlightLines: true,
-    highlightLanguage: 'elixir'
+    highlightLanguage: 'elixir',
+    ratio: "16:9"
   })
+  // show.on('showSlide', (slide) => {
+  //   document
+  //     .querySelector('.remark-slide-container')
+  //     .classList = slide.properties.class
+  // })
 }
 
 if (module.hot) {

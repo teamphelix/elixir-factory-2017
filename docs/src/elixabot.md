@@ -35,7 +35,7 @@ class: font-title
 
 ---
 name: quick prototyping
-class: font-title
+class: code_slide
 
 .font-title[Quick Prototyping]
 
@@ -82,7 +82,8 @@ What does this way get us?
 name: small modules
 class: font-title
 
-Small Modules
+Small Modules\
+Isolated Functionality
 
 ---
 name: Dependency Management
@@ -95,12 +96,6 @@ name: Dependency Management
 class: font-title
 
 TDD/BDD
-
----
-name: Dependency Management
-class: font-title
-
-Isolated Functionality
 
 ---
 name: Dependency Management
@@ -150,7 +145,7 @@ Looking at our current app you see...
 
 ---
 
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%206.20.16%20PM.png)
+![](./images/umbrella-app-directory.png)
 
 ---
 name: Set up DB
@@ -177,96 +172,123 @@ class: font-title
 
 ---
 name: Show deps
-class: background-blk 
+background-color: black
 
 Let's add these to our mix.exs file
 
 ```elixir
-
   defp deps(_) do
     [
       {:postgrex, "~> 0.13.2"},
       {:ecto, "~> 2.1"}
     ]
   end  
-
 ```
----
-
-then run
-
----
-
-```
+```bash
 mix deps.get
-
 ```
 
 ---
+name: manage deps
+class: font-title
 
 Mix makes it super easy to manage dependencies
 
 ---
+name: conflict less likely
+class: font-title
 
 Which means conflict is less likely
 
 ---
+name: resolution easier
+class: font-title
 
 And resolution is easier
 
 ---
+name: resolution easier
+class: font-title
 
 Smarter tools allow us to build smarter apps
 
 ---
+name: smarter tools
+class: font-title
 
 # #smartertools
 
 ---
+name: what comes with smarter apps
+class: font-title
 
 What comes with smarter apps
 
 ---
+name: tested apps
+class: font-title
 
 Tested Apps
 
 ---
+name: TDD stability
+class: font-title
 
 Test Driven Development gives our apps stability
 
 ---
+name: Dave Thomas
+class: font-title
 
 Just Ask Dave Thomas
 
 ---
+name:  and you can
+class: font-title
 
 And you probably can...cause he's here
 
 ---
+name: testing is core
+class: font-title
 
 In Elixir, testing is a core feature
 
 ---
+name: not an afterthought
+class: font-title
 
 It's not an afterthought
 
 ---
+name: test unit integration
+class: font-title
 
 Let's take a look at Test Unit Integration
 
 ---
+name: db vote count
+class: font-title
 
 We want to DB app make sure our vote count is being set accurately
 
 ---
+name: ensure
+class: font-title
 
 How can we ensure that?
 
 ---
+name: ExUnit
+class: font-title
 
 We use ExUnit to Unit test
 
 ---
+name: db sample
+class: font-title
+background-color: black
+
 
 ```
 test "creates a new question when id is new" do
@@ -283,18 +305,28 @@ end
 ```
 
 ---
+name: failing test
+class: font-title
 
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%2011.06.42%20PM.png)
+
+![](./images/failing-test.png)
 
 ---
+name: failing test 1
+class: font-title
 
 Now that we have a failing test
 
 ---
+name: passing test
+class: font-title
 
 Then we implement the functionality to make it pass
 
 ---
+name: passing test 1
+class: font-title
+background-color: black
 
 ```elixir
   def first_or_create(tweet) do
@@ -317,53 +349,76 @@ Then we implement the functionality to make it pass
 ```  
 
 ---
+name: passing tests 2
+class: font-title
 
 
-![](/Users/anna/Desktop/Screen%20Shot%202017-03-20%20at%2011.08.15%20PM.png)
+![](./images/passing-test.png)
 
 
 ---
+name: confident code
+class: font-title
+
 
 This gives us the confidence that our code is working
 
 ---
+name: Twytter
+class: font-title
+
 Before we move on to our Twytter app
 ---
-let's take a look at a powerful feature of elixir
+name: powerful feature elixir
+class: font-title
+
+let's take a look at Pattern Matching
 ---
-Pattern matching
----
+name: pattern matching example
+class: font-title
+background-color: black
+
 ```elixir
-case Db.Repo.one(query) do
-  nil ->
-    {:ok, saved_tweet} = Db.Repo.insert(new_tweet) # Create tweet
-    saved_tweet
-  model -> model
+defp create_tweet({ nil, tweet }) do
+  new_tweet = %Db.Tweet{
+    tweet_id: tweet.id_str,
+    question: tweet.text,
+    favorite_count: tweet.favorite_count
+  }
+
+  {:ok, saved_tweet} = Db.Repo.insert(new_tweet)
+  saved_tweet
 end
+
+defp create_tweet({ instance, _ }), do: instance
 ```
 ---
+name: important
+class: font-title
+
 Why is this important?
 
 ---
+name: pattern matching
+class: font-title
 
 Easily understandable as to what is going on
 
 ---
+name: pattern matching
+class: font-title
 
 Declarative code
 
 ---
+name: pattern matching
+class: font-title
 
 Prevents complicated conditionals
 
 ---
 
-Compiler helps prevent data-type collisions
-
----
-
 Pattern matching allows you to deal with data in small pieces.
-
 
 ---
 Let's take a look at our Twytter app
@@ -374,7 +429,7 @@ Back to our high level diagram
 
 ---
 
-![](/Users/anna/Desktop/high_level_overview.jpg)
+![](./images/high-level-overview.png)
 
 ---
 
@@ -383,12 +438,6 @@ Let's implement the Twitter streamer
 ---
 
 ... and try not to get banned
-
----
-
-1. Fetch tweets
-2. Check DB and persist questions
-3. Send to web
 
 ---
 
@@ -405,6 +454,7 @@ tweets = ExTwitter.search(hashtag)
 ```
 
 ---
+background-color: black
 
 ## With limits
 
@@ -414,6 +464,7 @@ tweets = ExTwitter.search(hashtag, opts)
 ```
 
 ---
+background-color: black
 
 2. Persist in DB
 
@@ -423,10 +474,7 @@ db_tweet = Db.Tweet.update_votes(db_tweet, tweet.favorite_count)
 ```
 
 ---
-
-3. Send to web
-
----
+background-color: black
 
 ```elixir
 jsonable_tweets = tweets |> Enum.map(&to_jsonable/1)
@@ -434,6 +482,7 @@ Web.WsServer.broadcast(jsonable_tweets)
 ```
 
 ---
+background-color: black
 
 ```elixir
 def flow(hash_tag) do
@@ -447,12 +496,12 @@ end
 ```
 
 ---
-
+class:
 ## Lots of problems
 
-* Mixing of concerns
+.left.middle[* Mixing of concerns
 * Difficult to test
-* Pulls in a lot of disparate pieces into a monolithic method
+* Pulls in a lot of disparate pieces into a monolithic method]
 
 ---
 
@@ -468,21 +517,7 @@ Looking at the design
 
 ---
 
-![](/Users/anna/Desktop/high_level_overview.jpg)
-
----
-
-1. Fetch tweets
-2. Check DB and persist questions
-3. Send to web
-
----
-
-This looks like a flow diagram
-
----
-
-![](http://www.ctgclean.com/sites/www.ctgclean.com/files/tech-blog/wp-content/uploads/Backpressure-Limiting-Valve.jpg)
+![](./images/high-level-overview.png)
 
 ---
 
@@ -490,16 +525,10 @@ Yet what if we flipped the direction of the flow?
 
 ---
 
+![](./images/i-love-lucy.gif)
+
+---
 ## GenStage goes backwards
-
----
-
-Why go backwards?
----
-
-![](/Users/anna/Desktop/lucy1.gif)
-![](/Users/anna/Desktop/lucy2.gif)
-![](/Users/anna/Desktop/lucy3.gif)
 
 ---
 
@@ -507,17 +536,14 @@ Backpressure / control
 
 ---
 
-1. Demand from web app
-2. Pull from Twitter
+![](./images/high-level-overview.png)
 
 ---
-30,000 ft view
----
 
-
----
 How is this backwards system setup?
+
 ---
+background-color: black
 
 ```elixir
 {:ok, producer} = GenStage.start_link(TweetService, "#elixabot")
@@ -529,41 +555,36 @@ GenStage.sync_subscribe(consumer, to: prod_con, max_demand: 5)
 ```
 
 ---
-
 class: show_genstage
 
 <ul class="genstage">
-  <li class="stage active">Web</li>
-  <li class="stage">DB</li>
   <li class="stage">Twitter</li>
+  <li class="stage">DB</li>
+  <li class="stage active">Web</li>
+
 </ul>
 
 ## Web (tweet consumer)
 
 ---
-
 class: show_genstage
 
 <ul class="genstage">
-  <li class="stage active">Web</li>
-  <li class="stage">DB</li>
   <li class="stage">Twitter</li>
+  <li class="stage">DB</li>
+  <li class="stage active">Web</li>
 </ul>
 
 Since we want to play nice to Twitter, we need to control our desires... aka manage demand pressure
 
 ---
-
-![](/Users/anna/Desktop/client-meme.jpg)
-
----
-
-class: show_genstage
+class: show_genstage code_slide
+background-color: black
 
 <ul class="genstage">
-  <li class="stage active">Web</li>
-  <li class="stage">DB</li>
   <li class="stage">Twitter</li>
+  <li class="stage">DB</li>
+  <li class="stage active">Web</li>  
 </ul>
 
 ```elixir
@@ -579,13 +600,13 @@ end
 ```
 
 ---
-
 class: show_genstage
+background-color: black
 
 <ul class="genstage">
-  <li class="stage active">Web</li>
-  <li class="stage">DB</li>
   <li class="stage">Twitter</li>
+  <li class="stage">DB</li>
+  <li class="stage active">Web</li>  
 </ul>
 
 ```elixir
@@ -608,25 +629,24 @@ end
 ```
 
 ---
-
 class: show_genstage
 
 <ul class="genstage">
-  <li class="stage">Web</li>
-  <li class="stage active">DB</li>
   <li class="stage">Twitter</li>
+  <li class="stage active">DB</li>
+  <li class="stage">Web</li>
 </ul>
 
 ## DB Producer Consumer
 
 ---
-
 class: show_genstage
+background-color: black
 
 <ul class="genstage">
-  <li class="stage">Web</li>
-  <li class="stage active">DB</li>
   <li class="stage">Twitter</li>
+  <li class="stage active">DB</li>
+  <li class="stage">Web</li>
 </ul>
 
 ```elixir
@@ -651,13 +671,13 @@ end
 Now, to get the tweets (Finally)
 
 ---
-
 class: show_genstage
+background-color: black
 
 <ul class="genstage">
-  <li class="stage">Web</li>
-  <li class="stage">DB</li>
   <li class="stage active">Twitter</li>
+  <li class="stage">DB</li>
+  <li class="stage">Web</li>
 </ul>
 
 ```elixir
@@ -684,14 +704,6 @@ end
 
 ---
 
-## Separation of concerns
-
-1. Tweet producer
-2. Db producer/consumer
-3. Web consumer
-
----
-
 Our _flow_ is missing one piece
 
 ---
@@ -703,6 +715,7 @@ Our _flow_ is missing one piece
 We'll use the fantastic `Cowboy` connection pooling library
 
 ---
+background-color: black
 
 ```elixir
 defp deps(_) do
@@ -715,7 +728,7 @@ end
 ```
 
 ---
-
+background-color: black
 
 ```elixir
 Plug.Adapters.Cowboy.child_spec(
@@ -741,6 +754,7 @@ end
 Web.Router
 
 ---
+background-color: black
 
 ```elixir
 defmodule Web.Router do
@@ -772,6 +786,7 @@ end
 Because all the cool kids are doing it...
 
 ---
+background-color: black
 
 ```html
 <!doctype html>
@@ -797,10 +812,11 @@ Because all the cool kids are doing it...
 ---
 
 
-* React
-* Webpack 2
+.middle.left[* React
+* Webpack 2]
 
 ---
+background-color: black
 
 ```js
 const publicPath = "http://localhost:8080/"
@@ -823,19 +839,10 @@ const publicPath = "http://localhost:8080/"
 
 ---
 
-## App loading
-
----
-
-```javascript
-ReactDOM.render(<App />, MOUNT)
-```
-
----
-
 ## Redux
 
 ---
+background-color: black
 
 ```javascript
 export const socketConnect = () => dispatch => {
@@ -867,6 +874,7 @@ export const socketConnect = () => dispatch => {
 ## Cowboy websocket
 
 ---
+background-color: black
 
 ```elixir
 defmodule Web.SocketHandler do
@@ -894,6 +902,7 @@ end
 ## Sending data from client to server
 
 ---
+background-color: black
 
 ```javascript
 socket.send(JSON.stringify({message: "c major"}))
@@ -918,12 +927,14 @@ end
 Need to keep track of the connected clients
 
 ---
+background-color: black
 
 ```elixir
 supervisor(Registry, [:duplicate, :ws_registry]),
 ```
 
 ---
+background-color: black
 
 ```elixir
 def init(_, _req, _opts) do
@@ -938,6 +949,7 @@ end
 ## Subscribing looks like...
 
 ---
+background-color: black
 
 ```elixir
 defmodule Web.WsServer do
@@ -954,7 +966,7 @@ end
 ```
 
 ---
-
+background-color: black
 
 ```elixir
 def broadcast(data, topic \\ "message") do
@@ -970,6 +982,7 @@ end
 Then handle the normal redux workflow. for instance...
 
 ---
+background-color: black
 
 ```javascript
 export const reducer = (state = initialState, action) => {
@@ -987,10 +1000,10 @@ export const reducer = (state = initialState, action) => {
 
 ---
 
-## Topics covered
+Questions?
 
-* GenServer
-* GenStage
-* Small modules
-* Supervisors (TODO)
-*
+---
+
+Thank you!
+
+@auser/@aneyzb
