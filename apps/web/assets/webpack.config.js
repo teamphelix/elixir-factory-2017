@@ -29,7 +29,7 @@ module.exports = (env='dev') => {
     entry.app.unshift(hot)
   }
 
-  const plugins = [
+  let plugins = [
     new CopyWebpackPlugin([{
       from: "static"
     }]),
