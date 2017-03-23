@@ -5,13 +5,10 @@
 $bg: #ffffff;
 $blk: #000000;
 
-body { font-family: 'Droid Serif'; }
-h1, h2, h3 {
-  font-family: 'Yanone Kaffeesatz';
-  font-weight: normal;
-}
+body { font-family: sans-serif; }
+
 .remark-code, .remark-inline-code {
-  font-family: 'Ubuntu Mono';
+  font-family: 'Ubuntu Mono', sans-serif;
 }
 
 .remark-container {

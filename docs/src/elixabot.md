@@ -8,7 +8,7 @@ How we write better programs with Elixir
 name: Who are we
 class: font-title
 
-Who are we??
+Who are we?
 
 ---
 name: Ari + Anna
@@ -19,7 +19,7 @@ Ari + Anna
 name: Ginger
 class: font-title
 
-Insert Ginger photo here
+![](./images/ginger1.png)
 
 ---
 name: elixir helps us
